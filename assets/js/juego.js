@@ -7,6 +7,7 @@ S = rombo
 let deck = [];
 const tipos = ["C", "D", "H", "S"];
 const especiales = ["A", "J", "Q", "K"];
+let puntos = 6;
 
 //Crea la baraja
 const crearDeck = () => {
@@ -30,12 +31,27 @@ const crearDeck = () => {
 
 crearDeck();
 
-//Pedir carta
+//Pedir carta del deck
 const pedirCarta = () => {
   if (deck.length === 0) throw "No hay cartas en el deck";
 
   const carta = deck.pop();
+  console.log({ carta, deck });
   return carta;
 };
 
-pedirCarta();
+//Obtiene el valor de la carta extraida
+const valorCarta = (carta, puntos) => {
+  const valor = carta.substring(0, carta.length - 1);
+
+  return (puntos += !isNaN(valor)
+    ? valor * 1
+    : valor === "A"
+    ? puntos + 11 > 21
+      ? 1
+      : 11
+    : 10);
+};
+
+puntos = valorCarta(pedirCarta(), puntos);
+console.log({ puntos });

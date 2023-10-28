@@ -73,6 +73,16 @@ const turnoPC = (puntosMinimos) => {
     cartasPC.append(cartaHTML);
     if (puntosPC === 21) break;
   } while (puntosMinimos >= puntosPC);
+
+  setTimeout(() => {
+    mensaje =
+      puntosJG === puntosPC
+        ? "Empate"
+        : puntosJG > 21 || (puntosPC > puntosJG && puntosPC < 21)
+        ? "Perdiste"
+        : "Ganaste";
+    alert(mensaje);
+  }, 20);
 };
 
 //Eventos
@@ -86,11 +96,9 @@ btnPedir.addEventListener("click", () => {
   cartasJG.append(cartaHTML);
 
   if (puntosJG > 21) {
-    console.warn("Perdiste");
     btnPedir.disabled = true;
     turnoPC(0);
   } else if (puntosJG === 21) {
-    console.warn("Ganaste");
     btnPedir.disabled = true;
     btnDetener.disabled = true;
     turnoPC(puntosJG);
@@ -99,9 +107,4 @@ btnPedir.addEventListener("click", () => {
 
 btnDetener.addEventListener("click", () => {
   turnoPC(puntosJG);
-  if (puntosPC > puntosJG && puntosPC < 21) {
-    console.warn("Perdiste");
-  } else {
-    console.warn("Ganaste");
-  }
 });

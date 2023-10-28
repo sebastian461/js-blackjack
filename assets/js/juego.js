@@ -7,7 +7,13 @@ S = rombo
 let deck = [];
 const tipos = ["C", "D", "H", "S"];
 const especiales = ["A", "J", "Q", "K"];
-let puntos = 6;
+let puntosJG = 0;
+let puntosPC = 0;
+
+//Referencias HTML
+const btnPedir = document.querySelector("#btnPedir");
+const puntosHTML = document.querySelectorAll("small");
+const cartasJG = document.querySelector("#jugador-cartas");
 
 //Crea la baraja
 const crearDeck = () => {
@@ -26,7 +32,6 @@ const crearDeck = () => {
   }
 
   deck = _.shuffle(deck);
-  console.log({ deck });
 };
 
 crearDeck();
@@ -36,7 +41,6 @@ const pedirCarta = () => {
   if (deck.length === 0) throw "No hay cartas en el deck";
 
   const carta = deck.pop();
-  console.log({ carta, deck });
   return carta;
 };
 
@@ -53,5 +57,14 @@ const valorCarta = (carta, puntos) => {
     : 10);
 };
 
-puntos = valorCarta(pedirCarta(), puntos);
-console.log({ puntos });
+//Eventos
+btnPedir.addEventListener("click", () => {
+  const carta = pedirCarta();
+  puntosJG = valorCarta(carta, puntosJG);
+  puntosHTML[0].innerText = puntosJG;
+  const cartaHTML = document.createElement("img");
+  cartaHTML.classList.add("carta");
+  cartaHTML.src = "assets/cartas/cartas/" + carta + ".png";
+  cartasJG.append(cartaHTML);
+  console.log({ carta, deck, puntosJG });
+}); //Una función que pasa por argumento de otra otra función es un Callback

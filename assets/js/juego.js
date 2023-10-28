@@ -7,12 +7,13 @@ S = rombo
 let deck = [];
 const tipos = ["C", "D", "H", "S"];
 const especiales = ["A", "J", "Q", "K"];
-let puntosJG = 0;
-let puntosPC = 0;
+let puntosJG = 0,
+  puntosPC = 0;
 
 //Referencias HTML
 const btnPedir = document.querySelector("#btnPedir");
 const btnDetener = document.querySelector("#btnDetener");
+const btnNuevo = document.querySelector("#btnNuevo");
 const puntosHTML = document.querySelectorAll("small");
 const cartasJG = document.querySelector("#jugador-cartas");
 const cartasPC = document.querySelector("#pc-cartas");
@@ -20,6 +21,7 @@ const cartasPC = document.querySelector("#pc-cartas");
 //Crea la baraja
 const crearDeck = () => {
   //inserción de las cartas normales
+  deck = [];
   for (let i = 2; i <= 10; i++) {
     for (let tipo of tipos) {
       deck.push(`${i}${tipo}`);
@@ -107,4 +109,16 @@ btnPedir.addEventListener("click", () => {
 
 btnDetener.addEventListener("click", () => {
   turnoPC(puntosJG);
+});
+
+btnNuevo.addEventListener("click", () => {
+  puntosJG = 0;
+  puntosPC = 0;
+  crearDeck();
+  puntosHTML[0].innerText = 0;
+  puntosHTML[1].innerText = 0;
+  cartasPC.innerHTML = "";
+  cartasJG.innerHTML = "";
+  btnDetener.disabled = false;
+  btnPedir.disabled = false;
 });

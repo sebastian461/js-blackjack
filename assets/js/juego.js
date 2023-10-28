@@ -12,8 +12,10 @@ let puntosPC = 0;
 
 //Referencias HTML
 const btnPedir = document.querySelector("#btnPedir");
+const btnDetener = document.querySelector("#btnDetener");
 const puntosHTML = document.querySelectorAll("small");
 const cartasJG = document.querySelector("#jugador-cartas");
+const cartasPC = document.querySelector("#pc-cartas");
 
 //Crea la baraja
 const crearDeck = () => {
@@ -57,6 +59,22 @@ const valorCarta = (carta, puntos) => {
     : 10);
 };
 
+//turno PC
+const turnoPC = (puntosMinimos) => {
+  btnPedir.disabled = true;
+  btnDetener.disabled = true;
+  do {
+    const carta = pedirCarta();
+    puntosPC = valorCarta(carta, puntosPC);
+    puntosHTML[1].innerText = puntosPC;
+    const cartaHTML = document.createElement("img");
+    cartaHTML.classList.add("carta");
+    cartaHTML.src = `assets/cartas/cartas/${carta}.png`;
+    cartasPC.append(cartaHTML);
+    if (puntosPC === 21) break;
+  } while (puntosMinimos >= puntosPC);
+};
+
 //Eventos
 btnPedir.addEventListener("click", () => {
   const carta = pedirCarta();
@@ -64,7 +82,26 @@ btnPedir.addEventListener("click", () => {
   puntosHTML[0].innerText = puntosJG;
   const cartaHTML = document.createElement("img");
   cartaHTML.classList.add("carta");
-  cartaHTML.src = "assets/cartas/cartas/" + carta + ".png";
+  cartaHTML.src = `assets/cartas/cartas/${carta}.png`;
   cartasJG.append(cartaHTML);
-  console.log({ carta, deck, puntosJG });
+
+  if (puntosJG > 21) {
+    console.warn("Perdiste");
+    btnPedir.disabled = true;
+    turnoPC(0);
+  } else if (puntosJG === 21) {
+    console.warn("Ganaste");
+    btnPedir.disabled = true;
+    btnDetener.disabled = true;
+    turnoPC(puntosJG);
+  }
 }); //Una función que pasa por argumento de otra otra función es un Callback
+
+btnDetener.addEventListener("click", () => {
+  turnoPC(puntosJG);
+  if (puntosPC > puntosJG && puntosPC < 21) {
+    console.warn("Perdiste");
+  } else {
+    console.warn("Ganaste");
+  }
+});
